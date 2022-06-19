@@ -47,19 +47,22 @@ class Linreg:
         print(type(b))
 
     def PolyTrainerSGD():
-        x = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/XY/X.npy")
         y = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/XY/Y.npy")
 
-        W0 = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/W.npy")
+        W1 = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/W.npy")
+        W2 = cp.zeros(W1.shape)
+        W3 = cp.copy(W1.shape)
 
         b = 0
-        N = x.shape[0]
+        N = y.shape[0]
 
-        W = cp.array([W0 for _ in range(0,10)])
 
         iter = 10000
         alpha = 0.00000001
 
         for i in range(iter):
-           pass 
-           
+            X = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/XY/"+"x"+str(i%10)+".npy")
+            t = i%10
+            Y = y[int(t*N/10):int((t+1)*N/10)]
+
+            ypred = cp.dot(X,W1) + cp.dot(X,W2) + cp.dot(X,W3) + b

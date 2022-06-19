@@ -1,3 +1,4 @@
+from json import load
 import os 
 from PIL import Image
 import numpy as cp
@@ -48,7 +49,9 @@ class dataprocessor:
         cp.save(outfile+"/"+"X",X)
         cp.save(outfile+"/"+"Y",Y)
 
-        
-
-x = dataprocessor
-x.process()
+    def splitX(pth):
+        X = cp.load(pth)
+        N = X.shape[0]
+        for i in range(10):
+            x = X[int(i*N/10):int((i+1)*N/10),:]
+            cp.save("/home/abhishekj/Github/OCR_WithTF_PyQT/XY/"+"x"+str(i),x)
