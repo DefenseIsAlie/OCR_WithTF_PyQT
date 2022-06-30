@@ -1,4 +1,3 @@
-from lib2to3.pytree import convert
 import numpy as cp
 from PIL import Image
 

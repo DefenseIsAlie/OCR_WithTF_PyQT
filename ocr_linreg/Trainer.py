@@ -1,3 +1,4 @@
+from msilib import Win64
 import os 
 import numpy as cp
 
@@ -51,18 +52,42 @@ class Linreg:
 
         W1 = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/W.npy")
         W2 = cp.zeros(W1.shape)
-        W3 = cp.copy(W1.shape)
+        W3 = cp.copy(W2)
+        W4 = cp.copy(W2)
+        
 
         b = 0
         N = y.shape[0]
+        pth = ""
 
-
-        iter = 10000
+        iter = 100000
         alpha = 0.00000001
 
         for i in range(iter):
-            X = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/XY/"+"x"+str(i%10)+".npy")
-            t = i%10
-            Y = y[int(t*N/10):int((t+1)*N/10)]
+            X = cp.load("/home/abhishekj/Github/OCR_WithTF_PyQT/XY/"+"x"+str(i%1000)+".npy")
+            t = i%1000
+            Y = y[int(t*N/1000):int((t+1)*N/1000)]
 
-            ypred = cp.dot(X,W1) + cp.dot(X,W2) + cp.dot(X,W3) + b
+            X2 = X**2
+            X3 = X**3
+            X4 = X**4
+
+            ypred = cp.dot(X,W1) + cp.dot(X2,W2) + cp.dot(X3,W3) + cp.dot(X4,W4) + b
+
+            n = Y.shape[0]
+
+            dw = alpha/n*(cp.dot((ypred-Y),X)+2*cp.dot((ypred-Y),X2)+3*cp.dot((ypred-Y),X3)+4*cp.dot((ypred-Y),X4))
+            db = alpha*2/n*(ypred-Y)
+
+            del X
+            del X2
+            del X3
+            del X4
+
+            W -= dw
+            b -= db
+
+        cp.savetxt(pth,W)
+        cp.savetxt(pth,b)
+        cp.save(pth,W)
+        cp.save(pth,b)
